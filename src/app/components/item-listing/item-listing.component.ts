@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { OfferItem } from '../../services/item.service';
 import { ToastController } from '@ionic/angular';
+import { OfferItem } from '../../models/offer-item.model';
 import { FavouritesService } from '../../services/favourites.service';
 
 @Component({

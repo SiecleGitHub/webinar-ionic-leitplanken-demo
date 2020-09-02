@@ -9,14 +9,18 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ImmoStoreDexieService, ImmoStoreService } from './services/immo-store-web.service';
+import { ItemOfferDexieStore } from './stores/item-offer-dexie.store';
+import { ItemOfferStore } from './stores/item-offer.store';
+import { PictureeIndexDbStore, PICTURE_STORE_TOKEN } from './stores/picture-index-db.store';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      // navAnimation: NAV_ANIMATION,
+    }),
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
@@ -25,8 +29,8 @@ import { ImmoStoreDexieService, ImmoStoreService } from './services/immo-store-w
     SplashScreen,
     FingerprintAIO,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: ImmoStoreService, useClass: ImmoStoreDexieService },
-    // { provide: ImmoStoreService, useClass: ImmoCapacitorStorage },
+    { provide: ItemOfferStore, useClass: ItemOfferDexieStore },
+    { provide: PICTURE_STORE_TOKEN, useClass: PictureeIndexDbStore },
   ],
   bootstrap: [AppComponent],
 })

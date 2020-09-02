@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ImmoStoreService } from './immo-store-web.service';
-import { OfferItem } from './item.service';
-import { ancestorWhere } from 'tslint';
+import { OfferItem } from '../models/offer-item.model';
+import { ItemOfferStore } from '../stores/item-offer.store';
 
 @Injectable({ providedIn: 'root' })
 export class FavouritesService {
-  constructor(private readonly immoStore: ImmoStoreService) {}
+  constructor(private readonly immoStore: ItemOfferStore) {}
 
   async getAll(): Promise<OfferItem[]> {
     return await this.immoStore.getOffers();

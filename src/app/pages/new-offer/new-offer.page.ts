@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
+import { OfferItem } from 'src/app/models/offer-item.model';
 import { FavouritesService } from 'src/app/services/favourites.service';
-import { OfferItem } from 'src/app/services/item.service';
+import { PictureService } from 'src/app/services/picture.service';
+import { PictureItem } from 'src/app/stores/picture-index-db.store';
+
+const { Clipboard } = Plugins;
 
 @Component({
   selector: 'app-new-offer',
@@ -17,26 +22,38 @@ export class NewOfferPage {
     shortDescription: ['', [Validators.required]],
     date: ['', [Validators.required]],
   });
-  images: string[] = [];
+  images: PictureItem[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly favourites: FavouritesService,
     private readonly toast: ToastController,
+    private readonly pictures: PictureService,
     private readonly router: Router,
   ) {}
 
-  async onCapture($event: string) {
-    this.images.push($event);
+  async onCapture(path: string) {
+    // this.images.push($event);
+    this.images.push({
+      path,
+      id: '',
+      offerId: -1,
+    });
   }
 
   async submit() {
     const item = {
       ...this.form.value,
       offerId: 1000 + Math.floor(Math.random() * 1000),
-      images: this.images,
+      image: this.images[0]?.path || '',
     } as OfferItem;
-    this.favourites.checkAndAdd(item);
+    await this.favourites.checkAndAdd(item);
+
+    if (this.images.length > 1) {
+      this.images
+        .slice(1)
+        .forEach(async (picture) => await this.pictures.savePicture(picture.path, item.offerId));
+    }
 
     const toast = await this.toast.create({
       translucent: false,
@@ -55,5 +72,10 @@ export class NewOfferPage {
 
     this.form.reset();
     this.images.length = 0;
+  }
+
+  async paste() {
+    const clipboard = await Clipboard.read();
+    this.form.patchValue({ title: clipboard.value });
   }
 }

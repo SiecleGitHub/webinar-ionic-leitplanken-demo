@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { PictureItem } from 'src/app/stores/picture-index-db.store';
 
 @Component({
   selector: 'app-gallery',
@@ -6,5 +7,5 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./gallery.component.scss'],
 })
 export class GalleryComponent {
-  @Input() images: string[];
+  @Input() images: PictureItem[];
 }

@@ -2,7 +2,7 @@
     <ion-item-sliding *ngFor="let offer of items">
         <ion-item [routerLink]="'/offer-details/' + offer.offerId">
             <ion-thumbnail slot="start">
-                <ion-img [src]="offer.images[0]"></ion-img>
+                <ion-img [src]="offer.image"></ion-img>
             </ion-thumbnail>
             <ion-label>
                 <h2 [innerHTML]="offer.title"></h2>

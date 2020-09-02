@@ -1,9 +1,6 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-// import the correct camera from capacitor
-import { Filesystem, FilesystemDirectory, Plugins } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
 import { PictureService } from 'src/app/services/picture.service';
-const { Camera } = Plugins;
 
 // A good example how to build an app and use the camera
 // https://ionicframework.com/docs/angular/your-first-app
@@ -45,17 +42,17 @@ export class CameraComponent {
     }
   }
 
-  async saveToDevice(data: string) {
-    const path = new Date().getTime() + 'ImmoAppImage.jpeg';
-    const file = await Filesystem.writeFile({
-      path,
-      data,
-      directory: FilesystemDirectory.Data,
-    });
-  }
+  // async saveToDevice(data: string) {
+  //   const path = new Date().getTime() + 'ImmoAppImage.jpeg';
+  //   const file = await Filesystem.writeFile({
+  //     path,
+  //     data,
+  //     directory: FilesystemDirectory.Data,
+  //   });
+  // }
 
   async takePictureCapacitor() {
     const picture = await this.picture.takePicture();
-    console.log(picture);
+    this.capture.emit(picture);
   }
 }

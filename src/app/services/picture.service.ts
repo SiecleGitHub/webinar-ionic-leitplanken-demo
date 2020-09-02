@@ -1,27 +1,31 @@
-import { Injectable } from '@angular/core';
-import { CameraPhoto, CameraResultType, Plugins } from '@capacitor/core';
+import { Inject, Injectable } from '@angular/core';
+import { CameraResultType, Plugins } from '@capacitor/core';
 import { ToastController } from '@ionic/angular';
-
+import { PictureItem, PictureStore, PICTURE_STORE_TOKEN } from '../stores/picture-index-db.store';
 const { Camera } = Plugins;
 
 @Injectable({
   providedIn: 'root',
 })
 export class PictureService {
-  constructor(private readonly toasts: ToastController) {}
+  constructor(
+    private readonly toasts: ToastController,
+    @Inject(PICTURE_STORE_TOKEN) private readonly pictures: PictureStore,
+  ) {}
 
-  async takePicture(): Promise<CameraPhoto> {
+  async takePicture(): Promise<string> {
     try {
-      return await Camera.getPhoto({
-        quality: 90,
-        allowEditing: true,
-        resultType: CameraResultType.Uri,
-      });
+      return (
+        await Camera.getPhoto({
+          quality: 90,
+          allowEditing: true,
+          resultType: CameraResultType.DataUrl,
+        })
+      ).dataUrl;
     } catch (e) {
       // notify user on error
-      console.error(e);
       const toast = await this.toasts.create({
-        message: 'Could not take picture',
+        message: 'Could not take picture - ' + e.message,
         duration: 2000,
         color: 'warning',
         translucent: true,
@@ -30,9 +34,43 @@ export class PictureService {
     }
   }
 
-  savePicture() {}
+  async savePicture(path: string, offerId: number): Promise<number> {
+    const pictureId = await this.pictures.savePicture({ path, offerId });
 
-  loadPicture() {}
+    // TODO better at bootstrap?
+    // check browser e.g. mobile Safari
+    try {
+      navigator.storage.persist();
+    } catch (e) {
+      console.warn(e);
+    }
+
+    const toastConfig = {
+      animated: true,
+      duration: 3000,
+      message: `Picture Saved`,
+      color: 'dark',
+    };
+
+    // check browser e.g. mobile Safari
+    if (navigator.storage && navigator.storage.estimate) {
+      const { quota, usage } = await navigator.storage.estimate();
+
+      if (quota / usage < 2) {
+        toastConfig.message += ' - Storage Usage Warning';
+        toastConfig.color = 'warning';
+      }
+    }
+
+    const quotaToast = await this.toasts.create(toastConfig);
+    await quotaToast.present();
+
+    return pictureId;
+  }
+
+  loadOfferPictures(offerid: number): Promise<PictureItem[]> {
+    return this.pictures.getPictureForOffer(offerid);
+  }
 
   convertToBase64(image: File): Promise<string> {
     if (!image) {

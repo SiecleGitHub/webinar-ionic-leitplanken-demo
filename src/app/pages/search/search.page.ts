@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemSerivce, OfferItem } from '../../services/item.service';
 import { Observable, Subject } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
+import { OfferItem } from '../../models/offer-item.model';
+import { ItemService } from '../../services/item.service';
 
 @Component({
   selector: 'app-search',
@@ -13,7 +14,7 @@ export class SearchPage implements OnInit {
   filter$ = new Subject<CustomEvent>();
   filteredItems$: Observable<OfferItem[]>;
 
-  constructor(public readonly items: ItemSerivce) {}
+  constructor(public readonly items: ItemService) {}
 
   async ngOnInit() {
     this.allItems = await this.items.getAll();
