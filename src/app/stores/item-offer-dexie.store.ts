@@ -24,7 +24,6 @@ export class ItemOfferDexieStore extends Dexie implements ImmoStorage {
   }
 
   async addOffer(offer: OfferItem): Promise<number> {
-    console.log('offer update dexie', offer);
     const id = await this.offers.add(offer);
     return id;
   }

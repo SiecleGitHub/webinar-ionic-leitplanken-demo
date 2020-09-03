@@ -1,20 +1,15 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AccessGuard } from './guards/access.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'tabbed',
     pathMatch: 'full',
   },
   {
-    path: 'favourites',
-    loadChildren: () => import('./pages/fav-list/fav-list.module').then((m) => m.FavListPageModule),
-  },
-  {
-    path: 'search',
-    loadChildren: () => import('./pages/search/search.module').then((m) => m.SearchPageModule),
+    path: 'tabbed',
+    loadChildren: () => import('./tabbed/tabbed.module').then((m) => m.TabbedPageModule),
   },
   {
     path: 'offer-details',
@@ -22,10 +17,24 @@ const routes: Routes = [
       import('./pages/offer-details/offer-details.module').then((m) => m.OfferDetailsPageModule),
   },
   {
-    path: 'new-offer',
-    canActivate: [AccessGuard],
+    path: 'some-page1',
     loadChildren: () =>
-      import('./pages/new-offer/new-offer.module').then((m) => m.NewOfferPageModule),
+      import('./pages/some-page1/some-page1.module').then((m) => m.SomePage1PageModule),
+  },
+  {
+    path: 'some-page2',
+    loadChildren: () =>
+      import('./pages/some-page2/some-page2.module').then((m) => m.SomePage2PageModule),
+  },
+  {
+    path: 'some-page3',
+    loadChildren: () =>
+      import('./pages/some-page3/some-page3.module').then((m) => m.SomePage3PageModule),
+  },
+  {
+    path: 'another-page',
+    loadChildren: () =>
+      import('./pages/another-page/another-page.module').then((m) => m.AnotherPagePageModule),
   },
 ];
 

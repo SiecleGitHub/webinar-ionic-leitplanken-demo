@@ -9,8 +9,6 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public mobile: boolean;
-
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -23,7 +21,6 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.mobile = this.platform.is('mobile') || this.platform.is('mobileweb');
     });
   }
 }

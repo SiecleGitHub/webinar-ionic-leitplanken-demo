@@ -18,9 +18,7 @@ import { PictureeIndexDbStore, PICTURE_STORE_TOKEN } from './stores/picture-inde
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot({
-      // navAnimation: NAV_ANIMATION,
-    }),
+    IonicModule.forRoot({}),
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
