@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { environment } from '../environments/environment';
+import { customAnimation } from './animations/fancyAnimation';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ItemOfferDexieStore } from './stores/item-offer-dexie.store';
@@ -18,7 +19,9 @@ import { PictureeIndexDbStore, PICTURE_STORE_TOKEN } from './stores/picture-inde
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot({}),
+    IonicModule.forRoot({
+      navAnimation: customAnimation,
+    }),
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],

@@ -40,7 +40,17 @@ export class PictureService {
     // TODO better at bootstrap?
     // check browser e.g. mobile Safari
     try {
-      navigator.storage.persist();
+      let persistState = await navigator.storage.persisted();
+      console.log('persist?', persistState);
+
+      if (!persistState) {
+        persistState =
+          (await navigator.permissions.query({ name: 'persistent-storage' })).state === 'granted';
+      }
+
+      if (persistState) {
+        navigator.storage.persist();
+      }
     } catch (e) {
       console.warn(e);
     }
